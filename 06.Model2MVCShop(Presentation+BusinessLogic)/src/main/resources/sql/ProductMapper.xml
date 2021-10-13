@@ -25,7 +25,7 @@
 	</insert>
 	
 	<!-- SQL : SELECT ONE -->
-	<select		id="getProduct"		parameterType="Object"		resultMap="productSelectMap">
+	<select		id="getProduct"		parameterType="int"		resultMap="productSelectMap">
 	SELECT
 	prod_no, prod_name, prod_detail, manufacture_day, price, image_file, reg_date
 	FROM product

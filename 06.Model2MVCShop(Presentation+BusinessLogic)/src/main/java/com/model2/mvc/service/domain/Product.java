@@ -2,6 +2,8 @@ package com.model2.mvc.service.domain;
 
 import java.sql.Date;
 
+import org.springframework.web.bind.annotation.RequestMapping;
+
 public class Product {
 
 	private String fileName;
@@ -37,7 +39,18 @@ public class Product {
 	}
 
 	public void setManuDate(String manuDate) {
-		this.manuDate = manuDate;
+
+		if (manuDate.length() == 10) {
+			String[] md = manuDate.split("-");
+			String y = md[0];
+			String m = md[1];
+			String d = md[2];
+
+			this.manuDate = y + m + d;
+		}else {
+			this.manuDate=manuDate;
+		}
+
 	}
 
 	public int getPrice() {
@@ -79,7 +92,6 @@ public class Product {
 	public void setRegDate(Date regDate) {
 		this.regDate = regDate;
 	}
-
 
 	// Override
 	public String toString() {

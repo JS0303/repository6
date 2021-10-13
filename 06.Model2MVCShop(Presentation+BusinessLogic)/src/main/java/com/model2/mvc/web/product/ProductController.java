@@ -20,6 +20,7 @@ import com.model2.mvc.common.Page;
 import com.model2.mvc.common.Search;
 import com.model2.mvc.service.domain.Product;
 import com.model2.mvc.service.product.ProductService;
+import com.model2.mvc.service.product.impl.ProductServiceImpl;
 
 @Controller
 public class ProductController {
@@ -50,23 +51,15 @@ public class ProductController {
 	}
 
 	@RequestMapping("/addProduct.do")
-	public String addProduct(@ModelAttribute("product") Product product) throws Exception {
+	public String addProduct(@ModelAttribute("product") Product product, Model model) throws Exception {
+		
 		System.out.println("/addProduct.do");
-		
-		String str= product.getManuDate();
-		System.out.println(str);
-		//제조일자를 "-"를 제외하고 split
-		String[] md=str.split("-");
-		String y = md[0];
-		String m = md[1];
-		String d = md[2];
-		
-		String manuDate=y+m+d;
-		System.out.println(manuDate);
-		
+
+		model.addAttribute("product", product);
+
 		productService.insertProduct(product);
 
-		return "redirect:/product/addProduct.jsp";
+		return "/product/addProduct.jsp";
 	}
 
 	@RequestMapping("/getProduct.do")
@@ -104,7 +97,7 @@ public class ProductController {
 
 		request.setAttribute("product", product);
 
-		System.out.println(":: GetProductAction.java에서 불러온 menu :: " + request.getParameter("menu"));
+		System.out.println(":: getProduct Method에서 불러온 menu :: " + request.getParameter("menu"));
 
 		if (request.getParameter("menu") == null) {
 			return "forward:/product/getProduct.jsp";
@@ -117,7 +110,7 @@ public class ProductController {
 			return "forward:/product/updateProduct.jsp";
 		}
 
-		//return "forward:/product/getProduct.jsp";
+		// return "forward:/product/getProduct.jsp";
 	}
 
 	@RequestMapping("/updateProductView.do")
@@ -133,17 +126,15 @@ public class ProductController {
 	}
 
 	@RequestMapping("/updateProduct.do")
-	public String updateProduct(@ModelAttribute("product") Product product, Model model, HttpSession session)
+	public String updateProduct(@ModelAttribute("product") Product product, Model model)
 			throws Exception {
 
 		System.out.println("/updateProduct.do");
 
 		productService.updateProduct(product);
 
-		int sessionId = ((Product) session.getAttribute("product")).getProdNo();
-		if (sessionId == product.getProdNo()) {
-			session.setAttribute("product", product);
-		}
+		model.addAttribute("product", product);
+		
 
 		return "redirect:/getProduct.do?prodNo=" + product.getProdNo();
 	}
